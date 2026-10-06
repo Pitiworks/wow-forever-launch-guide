@@ -106,6 +106,8 @@ function ns.HandleEvent(event, ...)
     if event == "PLAYER_LOGIN" or event == "PLAYER_ENTERING_WORLD" then
         ns.RunQuestieDBProbe()
         ns.RunShortestPathProbe()
+    elseif event == "PLAYER_REGEN_DISABLED" then
+        ns.RunShortestPathProbe()
     end
 end
 
