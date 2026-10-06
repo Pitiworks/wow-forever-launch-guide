@@ -16,6 +16,6 @@ Der Zustand wird immer getrennt pro Charakter geführt. Crowd-Signale wie **Area
 
 ## Aktueller Stand
 
-**M0 – Beta Probe:** Das Projekt bereitet Messungen vor. Es gibt noch keine Implementierung und bewusst keine technische Festlegung für die Live-Bridge.
+**M1 – Ingame Navigation:** Die M0-Beta-Probendaten liegen vor. Ein erster separater Navigations-Addon-Schnitt kann ein manuell gesetztes Ziel über die optionale öffentliche Shortest-Path-Forever-API führen; Guide, Optimizer und Live-Bridge sind weiterhin nicht implementiert.
 
 Die vollständige Projektreferenz befindet sich in [docs/PROJECT_BRAIN.md](docs/PROJECT_BRAIN.md).

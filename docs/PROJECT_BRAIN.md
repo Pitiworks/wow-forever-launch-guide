@@ -26,9 +26,9 @@ WoW Forever Launch Guide führt Spieler dynamisch von Level 1 bis 20. Es optimie
 
 WoW-Forever-Addon → Live State / Bridge → lokaler Guide / Optimizer → HTML-Dashboard. Der Optimizer kombiniert Questdaten mit Crowd-Signalen und sendet das nächste Ziel zurück an die Addon-Navigation. Details stehen in [ARCHITECTURE.md](ARCHITECTURE.md).
 
-## Aktueller Fokus: M0
+## Aktueller Fokus: M1
 
-M0 beantwortet durch reale Beta-Messungen, welche Charakter-, Quest-, NPC-, Koordinaten- und Fortschrittsinformationen der Forever-Client zuverlässig liefert. Keine Bridge-Technik wird vor diesen Ergebnissen festgelegt.
+M0 hat die Blizzard-State-APIs und die beiden optionalen Addon-Contracts im echten Forever-Client messbar gemacht. M1 baut darauf eine kleine Ingame-Navigation auf. Keine Bridge-Technik wird vor einer gesonderten, dokumentierten Entscheidung festgelegt.
 
 ## Definition of Done: M0
 
@@ -47,4 +47,4 @@ Release-ready vor dem **05.11.2026**.
 
 ## Projektstatus
 
-Das minimale M0-Diagnose-Addon ist gebaut und ein erster echter Beta-Lauf ist in [M0_BETA_RESULTS.md](M0_BETA_RESULTS.md) dokumentiert. Der Blizzard-State-Kern ist damit praktisch belegt; die gebündelten Present-Case-Prüfungen für QuestieDB Forever und Shortest Path Forever stehen noch aus. Es existiert weiterhin kein Guide-Code und keine technische Bridge-Festlegung.
+Das M0-Diagnose-Addon und die Beta-Ergebnisse sind in [M0_BETA_RESULTS.md](M0_BETA_RESULTS.md) dokumentiert. M1 beginnt mit einer optionalen SPF-basierten Navigation für explizit gesetzte Ziele; es existiert weiterhin keine technische Bridge-Festlegung und kein Optimizer.
