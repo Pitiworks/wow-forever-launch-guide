@@ -31,6 +31,7 @@
 - Mob-Erkennung
 - Mouseover-Hinweis
 - Karten-/Waypoint-Unterstützung
+- manueller Area-Crowd-Scan: aktuelle Zone und spielrelevanter Levelbereich über eine klickgebundene Who-Abfrage, automatische Auswertung und Speicherung pro Charakter
 
 ## M2 – Bridge
 

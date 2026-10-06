@@ -3,7 +3,7 @@ local _, ns = ...
 ns.UI = {}
 
 local frame = CreateFrame("Frame", nil, UIParent)
-frame:SetSize(480, 250)
+frame:SetSize(520, 310)
 frame:SetPoint("CENTER")
 frame:SetMovable(true)
 frame:EnableMouse(true)
@@ -24,13 +24,21 @@ title:SetText("WoW Forever Launch Guide — M1 navigation")
 
 local text = frame:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
 text:SetPoint("TOPLEFT", 14, -42)
-text:SetPoint("BOTTOMRIGHT", -14, 14)
+text:SetPoint("BOTTOMRIGHT", -14, 48)
 text:SetJustifyH("LEFT")
 text:SetJustifyV("TOP")
 
 local function unitLine(label, unit)
     return label .. ": " .. ns.Short(unit.name) .. " | NPC ID: " .. ns.Short(unit.npcID)
 end
+
+local scanButton = CreateFrame("Button", nil, frame, "UIPanelButtonTemplate")
+scanButton:SetSize(132, 24)
+scanButton:SetPoint("BOTTOMLEFT", 14, 14)
+scanButton:SetText("Scan area")
+scanButton:SetScript("OnClick", function()
+    ns.ScanCurrentArea()
+end)
 
 function ns.UI.Refresh()
     local target = ns.GetTarget()
@@ -47,6 +55,9 @@ function ns.UI.Refresh()
         "Use /wflg next to select it.",
         "", "|cffffd100[Navigation]|r", ns.NavigationStatus(),
         "Use /wflg go only when you want SPF to start its arrow and map marker.",
+        "", "|cffffd100[Area crowd]|r",
+        ns.CrowdSummary(),
+        ns.CrowdScanPending() and "Waiting for the server's Who response..." or "Click Scan area to update this value.",
         "", "|cffffd100[Recognition]|r",
         unitLine("Target", ns.UnitInfo("target")),
         unitLine("Mouseover", ns.UnitInfo("mouseover")),

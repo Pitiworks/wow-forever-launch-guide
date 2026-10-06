@@ -46,12 +46,14 @@ function ns.RefreshUI()
 end
 
 local events = CreateFrame("Frame")
-for _, event in ipairs({ "PLAYER_LOGIN", "PLAYER_ENTERING_WORLD", "PLAYER_TARGET_CHANGED", "UPDATE_MOUSEOVER_UNIT", "PLAYER_REGEN_ENABLED" }) do
+for _, event in ipairs({ "PLAYER_LOGIN", "PLAYER_ENTERING_WORLD", "PLAYER_TARGET_CHANGED", "UPDATE_MOUSEOVER_UNIT", "PLAYER_REGEN_ENABLED", "WHO_LIST_UPDATE" }) do
     pcall(events.RegisterEvent, events, event)
 end
 events:SetScript("OnEvent", function(_, event)
     if event == "PLAYER_LOGIN" then
         WoWForeverLaunchGuideCharDB = WoWForeverLaunchGuideCharDB or {}
+    elseif event == "WHO_LIST_UPDATE" and ns.OnWhoListUpdate then
+        ns.OnWhoListUpdate()
     end
     ns.RefreshUI()
 end)
@@ -70,12 +72,14 @@ SlashCmdList.WFLG = function(message)
         ns.ClearTarget()
     elseif lower == "status" then
         ns.PrintStatus()
+    elseif lower == "scan" then
+        ns.ScanCurrentArea()
     else
         local map, x, y, title = command:match("^target%s+(%d+)%s+([%d%.]+)%s+([%d%.]+)%s*(.*)$")
         if map and x and y then
             ns.SetTarget(tonumber(map), tonumber(x), tonumber(y), title)
         else
-            ns.Chat("commands: /wflg, next, target <map> <x> <y> [title], go, clear, status")
+            ns.Chat("commands: /wflg, next, target <map> <x> <y> [title], go, clear, status, scan")
         end
     end
 end

@@ -7,6 +7,7 @@
 - A player explicitly saves a next target with `/wflg target <map> <x> <y> [title]`.
 - `/wflg next` resolves the first mappable active quest objective, or a completed quest's turn-in, through Forever's native quest POIs and next-waypoint API.
 - `/wflg go` alone requests navigation from the optional `ShortestPathForever.API.Navigate` public API.
+- `Scan area` (or `/wflg scan`) sends one player-triggered Who query for the current zone and a relevant level band, then records the result automatically when the server answers.
 - Shortest Path Forever owns its arrow and map marker. This addon does not copy or reimplement them.
 - The panel shows the saved target, an SPF travel-time estimate when available, and current target/mouseover NPC IDs.
 - No navigation starts automatically on login, reload, target change, or quest update.
@@ -22,7 +23,10 @@
 | `/wflg go` | Explicitly start the SPF arrow and map marker for the saved target. |
 | `/wflg clear` | Cancel this addon's SPF journey when owned and clear the saved target. |
 | `/wflg status` | Write target and SPF status to chat. |
+| `/wflg scan` | Player-triggered crowd sample for the current zone and level minus two through plus three. |
 
 ## Deliberate limits
 
 M1 accepts a manually supplied target because guide selection belongs to later routing work. It never treats a QuestieDB zone ID as a Shortest Path Forever `uiMapID`: that relationship is not verified. QuestieDB is neither copied nor used for a route. The addon only calls Shortest Path Forever at runtime when the player requests it, and only through its documented public API.
+
+The crowd value is a player-triggered sample, not a radar. Forever restricts Who requests to a hardware event and the server can cap replies at 50 players. The addon's button satisfies the first restriction; a capped result is displayed as `at least 50` and `very high` rather than as an exact count.

@@ -45,3 +45,11 @@ Dieses ADR-artige Log dokumentiert Architektur- und Projektentscheidungen. Neue 
 **Entscheidung:** M1 löst das nächste Questziel ausschließlich aus nativen Quest-POIs oder dem nativen nächsten Quest-Waypoint auf. QuestieDB wird nur auf Verfügbarkeit seines öffentlichen Contracts geprüft und nicht als unbestätigter Kartenübersetzer verwendet. Gibt es keinen nativen Zielpunkt, speichert und startet das Addon keine Navigation.
 
 **Auswirkungen:** Der M1-Vertikalschnitt führt nur zu kartengenauen, laufzeitverifizierten Zielen. Eine spätere Mapping-Schicht darf erst nach einer dokumentierten, getesteten Zuordnung zwischen QuestieDB-Zone und `uiMapID` ergänzt werden.
+
+## D-010 – Crowd-Samples über klickgebundene Who-Abfragen
+
+**Kontext:** Der Forever-Client stellt `C_FriendList.SendWho`, `GetNumWhoResults`, `GetWhoInfo` und `WHO_LIST_UPDATE` bereit. Eine Who-Abfrage kann Zone und Levelbereich filtern, aber `SendWho` ist an eine Hardware-Aktion gebunden, serverseitig gedrosselt und liefert höchstens 50 Ergebnisse. Eine automatische Dauerschleife wäre daher unzulässig und fachlich irreführend.
+
+**Entscheidung:** M1 bietet einen sichtbaren Button und den Befehl `/wflg scan`. Nur diese explizite Spieleraktion sendet eine Who-Abfrage für aktuelle Zone sowie Level minus zwei bis Level plus drei. Nach `WHO_LIST_UPDATE` liest das Addon die Treffer automatisch, speichert einen zeitgestempelten Crowd-Sample pro Charakter und kennzeichnet serverseitig begrenzte Ergebnisse als Untergrenze.
+
+**Auswirkungen:** Das Addon liefert eine nachvollziehbare Momentaufnahme der Konkurrenz für das Startgebiet, nicht die exakte Zahl aller Spieler in Questreichweite. M4 kann diese Samples später mit Questfortschritt und alternativen Routen kombinieren.
