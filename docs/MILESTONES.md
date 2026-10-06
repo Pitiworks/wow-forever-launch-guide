@@ -13,6 +13,14 @@
 - Questitem-Update
 - Questabschluss
 - Questabgabe
+- QuestieDB Forever compatibility probe
+  - LibQuestieDB, Flavor und öffentlicher Contract
+  - Quest-Voraussetzungen, Chains sowie Start-/End-NPCs
+  - NPC-/Objekt-/Item-Koordinaten und Item-Drops
+  - Verhalten bei Login, Reload und fehlendem QuestieDB
+- Shortest Path Forever compatibility probe
+  - ausschließlich öffentliche API: Navigate, NavigateRoute, Estimate, CurrentStop, Ended
+  - Verhalten bei fehlender Dependency, Reload und Combat
 
 ## M1 – Ingame Navigation
 

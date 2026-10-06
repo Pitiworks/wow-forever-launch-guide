@@ -36,6 +36,8 @@ M0 beantwortet durch reale Beta-Messungen, welche Charakter-, Quest-, NPC-, Koor
 - Aktive Quest-ID, Name und Objectives sind getestet und dokumentiert.
 - Target- und Mouseover-NPC-IDs sind getestet und dokumentiert.
 - Fortschrittsupdates nach Kill und Questitem-Loot sowie Abschluss und Abgabe sind getestet und dokumentiert.
+- QuestieDB Forever ist auf Verfügbarkeit, Flavor, öffentlichen Contract, benötigte Quest-/NPC-/Objekt-/Item-Daten, Login-/Reload-Verhalten und fehlende Dependency geprüft.
+- Shortest Path Forever ist ausschließlich über seine öffentliche Navigation-API auf Verfügbarkeit, Kernaufrufe, Login-/Reload-, Combat- und fehlende-Dependency-Verhalten geprüft.
 - Verwendete Client-/Interface-Version, APIs, Events, erwartete und tatsächliche Werte sowie Zuverlässigkeit sind für jeden Test erfasst.
 - Die Ergebnisse reichen aus, um die Bridge-Entscheidung bewusst zu treffen oder offene Risiken klar zu benennen.
 
