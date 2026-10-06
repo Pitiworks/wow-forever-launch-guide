@@ -1,0 +1,14 @@
+## Interface: 16001
+## Title: WoW Forever Launch Probe
+## Notes: M0 beta diagnostics for the WoW Forever Launch Guide; no guide or navigation product logic.
+## Author: Pitiworks
+## Version: 0.1.0
+## SavedVariablesPerCharacter: WoWForeverLaunchProbeCharDB
+
+Core.lua
+State.lua
+QuestProbe.lua
+UnitProbe.lua
+QuestieDBProbe.lua
+ShortestPathProbe.lua
+UI.lua
