@@ -30,6 +30,19 @@ function ns.GetTarget()
     return WoWForeverLaunchGuideCharDB and WoWForeverLaunchGuideCharDB.target or nil
 end
 
+function ns.UseSuggestedTarget()
+    local target, reason = ns.ResolveSuggestedTarget()
+    if not target then
+        ns.Chat("no suggested target: " .. ns.Short(reason))
+        return false
+    end
+    WoWForeverLaunchGuideCharDB = WoWForeverLaunchGuideCharDB or {}
+    WoWForeverLaunchGuideCharDB.target = target
+    ns.Chat("next quest target selected; use /wflg go to start navigation")
+    ns.RefreshUI()
+    return true
+end
+
 function ns.ClearTarget()
     local target = ns.GetTarget()
     local path = api()

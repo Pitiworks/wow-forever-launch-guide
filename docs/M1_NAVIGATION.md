@@ -5,6 +5,7 @@
 ## Runtime behavior
 
 - A player explicitly saves a next target with `/wflg target <map> <x> <y> [title]`.
+- With QuestieDB installed, `/wflg next` resolves the first mappable active quest objective, or a completed quest's finisher, through the public QuestieDB contract.
 - `/wflg go` alone requests navigation from the optional `ShortestPathForever.API.Navigate` public API.
 - Shortest Path Forever owns its arrow and map marker. This addon does not copy or reimplement them.
 - The panel shows the saved target, an SPF travel-time estimate when available, and current target/mouseover NPC IDs.
@@ -16,6 +17,7 @@
 | Command | Result |
 | --- | --- |
 | `/wflg` | Open or close the navigation panel. |
+| `/wflg next` | Select the first mappable objective or turn-in from the active quest log. |
 | `/wflg target <map> <x> <y> [title]` | Save a normalized map target. Coordinates must be between `0` and `1`. |
 | `/wflg go` | Explicitly start the SPF arrow and map marker for the saved target. |
 | `/wflg clear` | Cancel this addon's SPF journey when owned and clear the saved target. |

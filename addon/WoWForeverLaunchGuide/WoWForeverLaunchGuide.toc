@@ -7,5 +7,6 @@
 ## SavedVariablesPerCharacter: WoWForeverLaunchGuideCharDB
 
 Core.lua
+QuestResolver.lua
 Navigation.lua
 UI.lua

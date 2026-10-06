@@ -62,6 +62,8 @@ SlashCmdList.WFLG = function(message)
     local lower = command:lower()
     if lower == "" then
         ns.UI.Toggle()
+    elseif lower == "next" then
+        ns.UseSuggestedTarget()
     elseif lower == "go" then
         ns.StartNavigation()
     elseif lower == "clear" then
@@ -73,7 +75,7 @@ SlashCmdList.WFLG = function(message)
         if map and x and y then
             ns.SetTarget(tonumber(map), tonumber(x), tonumber(y), title)
         else
-            ns.Chat("commands: /wflg, target <map> <x> <y> [title], go, clear, status")
+            ns.Chat("commands: /wflg, next, target <map> <x> <y> [title], go, clear, status")
         end
     end
 end
