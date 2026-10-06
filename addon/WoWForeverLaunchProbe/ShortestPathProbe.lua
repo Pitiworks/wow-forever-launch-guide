@@ -18,7 +18,7 @@ local function recordProbe(probe)
     return probe
 end
 
-function ns.RunShortestPathProbe()
+function ns.RunShortestPathProbe(combatObserved)
     ns.RefreshSnapshot()
     local root = _G.ShortestPathForever
     local api = type(root) == "table" and root.API or nil
@@ -48,7 +48,7 @@ function ns.RunShortestPathProbe()
     end
 
     local location = ns.snapshot.location or {}
-    local inCombat = type(InCombatLockdown) == "function" and InCombatLockdown() == true
+    local inCombat = combatObserved == true or (type(InCombatLockdown) == "function" and InCombatLockdown() == true)
     if type(api.Estimate) == "function" and location.mapID and location.x and location.y and not inCombat then
         local ok, seconds, reason = ns.SafeCall(
             api.Estimate, location.mapID, location.x, location.y, location.mapID, location.x, location.y

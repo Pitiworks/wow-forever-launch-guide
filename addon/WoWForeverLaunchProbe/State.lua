@@ -107,7 +107,7 @@ function ns.HandleEvent(event, ...)
         ns.RunQuestieDBProbe()
         ns.RunShortestPathProbe()
     elseif event == "PLAYER_REGEN_DISABLED" then
-        ns.RunShortestPathProbe()
+        ns.RunShortestPathProbe(true)
     end
 end
 

@@ -59,10 +59,23 @@ Player and pet GUIDs were not misrepresented as NPCs; their NPC-ID result was `u
 
 ## Remaining M0 work
 
-The normal Blizzard-state core is now evidenced well enough to continue collecting data passively during ordinary play. M0 itself is not complete yet:
-
-1. The QuestieDB **present** case still needs one bundled check: public contract, active-quest fields, data availability at login and after reload. The **missing dependency** case has already been observed as `LibQuestieDB unavailable`.
-2. The Shortest Path Forever **present** case still needs one bundled public-API check. No `Navigate` or `NavigateRoute` call may be made automatically.
-3. The exact client/build and interface version should be captured with the dependency run.
+The normal Blizzard-state core is now evidenced well enough to continue collecting data passively during ordinary play. The QuestieDB and Shortest Path **present** cases are documented below; the missing-QuestieDB case was already observed as `LibQuestieDB unavailable`. The only remaining passive evidence is the corrected Combat-path record and the exact client/build version. No `Navigate` or `NavigateRoute` call may be made automatically.
 
 No bridge, route optimizer, navigation user interface, or production guide decision follows from this evidence. Those remain gated by the documented M0 completion criteria.
+
+## Dependency run: QuestieDB and Shortest Path Forever
+
+A later normal play session loaded both optional addons and persisted their automatic probe results. No navigation call was made by the probe.
+
+| Dependency / check | Observed result |
+| --- | --- |
+| QuestieDB loaded | `present=true`, `addonLoaded=true` |
+| QuestieDB public contract | required contract was accepted; installed contract version was `3` |
+| QuestieDB active quest data | records for active quests `374` and `95314` were available; the no-active-quest case was handled without failure |
+| QuestieDB flavor metadata | `unavailable` from the installed addon's metadata; Forever compatibility must therefore be inferred from the successful contract/data run, not metadata alone |
+| Shortest Path loaded | `present=true`, `addonLoaded=true`, public API version `1` |
+| Shortest Path public members | `Navigate`, `NavigateRoute`, `Estimate`, `CurrentStop`, and `Ended` were present |
+| Shortest Path estimate | same-point estimate returned `0`; no navigation was started |
+| Reload behavior | automatic probe entries were recorded after reload/login |
+
+The session produced 13 QuestieDB probe entries and 83 Shortest Path probe entries. It also produced 70 `PLAYER_REGEN_DISABLED` events. In the already captured build, the immediate Shortest Path sample after that event reported `combat=not in combat`; therefore that value is **not** accepted as a valid Combat result. The probe now carries the combat-event context directly so later ordinary play will log the correct safe “in combat” path without a manual command. This remaining observation can be collected passively and does not require a dedicated gameplay session.
