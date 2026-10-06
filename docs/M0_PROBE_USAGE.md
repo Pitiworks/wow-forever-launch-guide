@@ -26,6 +26,8 @@ Das Probe funktioniert auch ohne diese Addons und zeigt deren Abwesenheit an.
 | `/wflp questie` | QuestieDB-Kompatibilitätsprobe erneut ausführen |
 | `/wflp path` | Shortest-Path-Kompatibilitätsprobe erneut ausführen |
 | `/wflp events` | Die letzten bis zu zehn Event-History-Einträge in den Chat schreiben |
+| `/wflp log` | Die letzten 20 Einträge des persistenten M0-Testlogs in den Chat schreiben |
+| `/wflp clearlog` | Den persistenten M0-Testlog dieses Charakters leeren |
 | `/wflp reset` | Nur temporäre Event- und Beobachtungswerte zurücksetzen |
 
 `Navigate` und `NavigateRoute` werden niemals automatisch und auch nicht per Slash-Command ausgelöst.
@@ -56,4 +58,6 @@ Das Probe funktioniert auch ohne diese Addons und zeigt deren Abwesenheit an.
 
 ## Persistenz und Grenzen
 
-Die Event-History verbleibt nur im Speicher und ist auf 100 relevante Events begrenzt. Die per-Character SavedVariable speichert nur Reload-Zähler, letzten Login-Zeitpunkt und die letzte Präsenz der optionalen Addons; sie speichert keine QuestieDB-Daten, Telemetrie oder Produktzustände.
+Die flüchtige Event-History bleibt auf 100 Einträge begrenzt. Zusätzlich speichert die Probe pro Charakter bis zu 2.000 Einträge im **M0-Testlog**, auch über `/reload` hinweg. Erfasst werden die registrierten M0-Ereignisse – unter anderem Login, XP-/Leveländerungen, Zonenwechsel, Quest-Updates, Questannahme/-abschluss/-abgabe sowie Target- und Mouseover-Wechsel. Für NPCs werden Name, GUID und erkannte NPC-ID hinterlegt; für XP- und Zonenwechsel der jeweilige Messwert.
+
+Der Testlog ist ausschließlich lokale M0-Diagnostik. Er wird nicht übertragen, verwendet keine Bridge und enthält weder QuestieDB-Katalogdaten noch Produktzustand. Mit `/wflp log` werden die letzten 20 Einträge in den Chat geschrieben; mit `/wflp clearlog` kann er vor einer neuen Testsequenz geleert werden.

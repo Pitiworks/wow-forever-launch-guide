@@ -99,6 +99,7 @@ function ns.HandleEvent(event, ...)
         WoWForeverLaunchProbeCharDB = WoWForeverLaunchProbeCharDB or {}
         WoWForeverLaunchProbeCharDB.reloads = (WoWForeverLaunchProbeCharDB.reloads or 0) + 1
         WoWForeverLaunchProbeCharDB.lastLogin = ns.lastEvent and ns.lastEvent.time
+        WoWForeverLaunchProbeCharDB.activityLog = WoWForeverLaunchProbeCharDB.activityLog or {}
     end
 
     ns.RefreshSnapshot()
@@ -125,5 +126,22 @@ function ns.DumpEvents()
     for index = start, #ns.eventHistory do
         local entry = ns.eventHistory[index]
         ns.Chat(entry.time .. " " .. entry.event .. (entry.args ~= "" and " (" .. entry.args .. ")" or ""))
+    end
+end
+
+function ns.DumpActivityLog()
+    local db = WoWForeverLaunchProbeCharDB or {}
+    local log = db.activityLog or {}
+    ns.Chat("persistent M0 test log: " .. #log .. " entries (last 20 follow)")
+    local start = math.max(1, #log - 19)
+    for index = start, #log do
+        local entry = log[index]
+        ns.Chat(entry.time .. " " .. entry.event .. (entry.detail and " (" .. entry.detail .. ")" or ""))
+    end
+end
+
+function ns.ClearActivityLog()
+    if WoWForeverLaunchProbeCharDB then
+        WoWForeverLaunchProbeCharDB.activityLog = {}
     end
 end

@@ -5,6 +5,7 @@ ns.owner = "WoWForeverLaunchProbe"
 ns.eventCounts = {}
 ns.eventHistory = {}
 ns.maxEvents = 100
+ns.maxActivityLogEntries = 2000
 ns.snapshot = {}
 ns.observed = {}
 
@@ -66,6 +67,54 @@ function ns.RecordEvent(event, ...)
     ns.lastEvent = entry
 end
 
+function ns.ActivityDetail(event, ...)
+    local character = ns.snapshot.character or {}
+    local location = ns.snapshot.location or {}
+    local unit
+    if event == "PLAYER_TARGET_CHANGED" then
+        unit = ns.snapshot.target
+    elseif event == "UPDATE_MOUSEOVER_UNIT" then
+        unit = ns.snapshot.mouseover
+    end
+
+    if unit and unit.available then
+        return "unit=" .. ns.Short(unit.name, 40) .. " npc=" .. ns.Short(unit.npcID, 24) .. " guid=" .. ns.Short(unit.guid, 64)
+    elseif event == "PLAYER_XP_UPDATE" or event == "PLAYER_LEVEL_UP" then
+        return "level=" .. ns.Short(character.level) .. " xp=" .. ns.Short(character.xp) .. "/" .. ns.Short(character.xpMax)
+    elseif event == "ZONE_CHANGED" or event == "ZONE_CHANGED_NEW_AREA" or event == "PLAYER_ENTERING_WORLD" then
+        return "zone=" .. ns.Short(location.zone, 40) .. " map=" .. ns.Short(location.mapID) .. " x=" .. ns.Short(location.x) .. " y=" .. ns.Short(location.y)
+    end
+
+    local parts = {}
+    for index = 1, select("#", ...) do
+        local value = select(index, ...)
+        if value ~= nil then
+            parts[#parts + 1] = ns.Short(value, 48)
+        end
+    end
+    return #parts > 0 and table.concat(parts, ", ") or nil
+end
+
+function ns.AppendActivity(event, detail)
+    local db = WoWForeverLaunchProbeCharDB
+    if type(db) ~= "table" then
+        return
+    end
+    db.activityLog = db.activityLog or {}
+    db.activityLog[#db.activityLog + 1] = {
+        time = now(),
+        event = event,
+        detail = detail,
+    }
+    if #db.activityLog > ns.maxActivityLogEntries then
+        table.remove(db.activityLog, 1)
+    end
+end
+
+function ns.RecordActivityEvent(event, ...)
+    ns.AppendActivity(event, ns.ActivityDetail(event, ...))
+end
+
 function ns.ResetTemporaryValues()
     ns.eventCounts = {}
     ns.eventHistory = {}
@@ -118,6 +167,7 @@ events:SetScript("OnEvent", function(_, event, ...)
     if ns.HandleEvent then
         ns.HandleEvent(event, ...)
     end
+    ns.RecordActivityEvent(event, ...)
     if ns.UI and ns.UI.Refresh then
         ns.UI.Refresh()
     end
@@ -126,6 +176,9 @@ end)
 SLASH_WFLP1 = "/wflp"
 SlashCmdList.WFLP = function(message)
     local command = (message or ""):lower():match("^%s*(.-)%s*$")
+    if command ~= "clearlog" then
+        ns.AppendActivity("COMMAND", command == "" and "/wflp" or "/wflp " .. command)
+    end
     if command == "" then
         ns.UI.Toggle()
     elseif command == "dump" then
@@ -138,10 +191,16 @@ SlashCmdList.WFLP = function(message)
         ns.UI.Refresh()
     elseif command == "events" then
         ns.DumpEvents()
+    elseif command == "log" then
+        ns.DumpActivityLog()
+    elseif command == "clearlog" then
+        ns.ClearActivityLog()
+        ns.AppendActivity("LOG_CLEARED", "by player command")
+        ns.Chat("persistent M0 test log cleared")
     elseif command == "reset" then
         ns.ResetTemporaryValues()
         ns.Chat("temporary diagnostic values reset")
     else
-        ns.Chat("commands: /wflp, dump, questie, path, events, reset")
+        ns.Chat("commands: /wflp, dump, questie, path, events, log, clearlog, reset")
     end
 end
