@@ -1,7 +1,9 @@
 local _, ns = ...
 
-local function firstID(rows)
-    return type(rows) == "table" and tonumber(rows[1]) or nil
+local function validPoint(map, x, y)
+    return type(map) == "number" and map > 0
+        and type(x) == "number" and x >= 0 and x <= 1
+        and type(y) == "number" and y >= 0 and y <= 1
 end
 
 local function activeQuests()
@@ -27,81 +29,71 @@ local function activeQuests()
     return quests
 end
 
-local function read(entity, id, fields)
-    if not (entity and type(entity.GetAll) == "function" and id) then
+-- Forever exposes active quest destinations as native POIs and next waypoints. Their uiMapID
+-- and normalized coordinates are already in the exact form required by Shortest Path Forever.
+local function nativePoint(quest)
+    if type(GetQuestUiMapID) ~= "function" then
         return nil
     end
-    local ok, values = ns.SafeCall(entity.GetAll, id, fields)
-    return ok and values or nil
-end
+    local mapOK, map = ns.SafeCall(GetQuestUiMapID, quest.id, true)
+    if not mapOK or type(map) ~= "number" or map <= 0 then
+        return nil
+    end
 
-local function firstSpawn(spawns)
-    if type(spawns) ~= "table" then
-        return nil
-    end
-    for zoneID, points in pairs(spawns) do
-        local point = type(points) == "table" and points[1] or nil
-        if type(zoneID) == "number" and type(point) == "table" and type(point[1]) == "number" and type(point[2]) == "number" then
-            if C_Map and type(C_Map.GetMapInfo) == "function" then
-                local ok, info = ns.SafeCall(C_Map.GetMapInfo, zoneID)
-                if ok and info then
-                    return zoneID, point[1] / 100, point[2] / 100
+    if C_QuestLog and type(C_QuestLog.GetQuestsOnMap) == "function" then
+        local poisOK, pois = ns.SafeCall(C_QuestLog.GetQuestsOnMap, map)
+        if poisOK and type(pois) == "table" then
+            for _, poi in ipairs(pois) do
+                if type(poi) == "table" and poi.questID == quest.id and not poi.isQuestStart and validPoint(map, poi.x, poi.y) then
+                    return map, poi.x, poi.y, "native quest POI"
                 end
             end
+        end
+    end
+
+    if C_QuestLog and type(C_QuestLog.GetNextWaypoint) == "function" then
+        local waypointOK, waypointMap, x, y = ns.SafeCall(C_QuestLog.GetNextWaypoint, quest.id)
+        if waypointOK and validPoint(waypointMap, x, y) then
+            return waypointMap, x, y, "native quest waypoint"
         end
     end
     return nil
 end
 
-local function npcTarget(lib, npcID, title, kind, questID)
-    local npc = read(lib.Npc, npcID, { "name", "spawns" })
-    if not npc then
-        return nil
-    end
-    local map, x, y = firstSpawn(npc[2])
-    if not map then
-        return nil
-    end
-    return {
-        map = map,
-        x = x,
-        y = y,
-        title = title .. " — " .. ns.Short(npc[1] or ("NPC " .. npcID)),
-        kind = kind,
-        questID = questID,
-        npcID = npcID,
-    }
-end
-
-function ns.ResolveSuggestedTarget()
+local function questieDBAvailable()
     local lib = _G.LibQuestieDB
     if not (type(lib) == "table" and type(lib.Quest) == "table" and type(lib.Npc) == "table") then
-        return nil, "QuestieDB unavailable"
+        return false
     end
     if type(lib.RequireContract) == "function" then
         local ok, accepted = ns.SafeCall(lib.RequireContract, 2)
-        if not ok or accepted ~= true then
-            return nil, "QuestieDB contract unavailable"
-        end
+        return ok and accepted == true
     end
+    return true
+end
+
+function ns.ResolveSuggestedTarget()
+    local sawQuest = false
     for _, quest in ipairs(activeQuests()) do
-        local values = read(lib.Quest, quest.id, { "finishedBy", "objectives" })
-        if values then
-            local finishers, objectives = values[1], values[2]
-            local npcID
-            local kind
-            if quest.complete then
-                npcID, kind = firstID(finishers and finishers[1]), "turnin"
-            else
-                local creatures = objectives and objectives[1]
-                local creature = type(creatures) == "table" and creatures[1] or nil
-                npcID, kind = type(creature) == "table" and firstID(creature[1]) or nil, "objective"
-            end
-            local target = npcID and npcTarget(lib, npcID, quest.name or ("Quest " .. quest.id), kind, quest.id) or nil
-            if target then
-                return target
-            end
+        sawQuest = true
+        local map, x, y, source = nativePoint(quest)
+        if map then
+            return {
+                map = map,
+                x = x,
+                y = y,
+                title = (quest.name or ("Quest " .. quest.id)) .. (quest.complete and " — turn in" or ""),
+                kind = quest.complete and "turnin" or "objective",
+                questID = quest.id,
+                source = source,
+            }
         end
     end
-    return nil, "no mappable active quest target"
+    if not sawQuest then
+        return nil, "no active quests"
+    end
+    if questieDBAvailable() then
+        return nil, "QuestieDB is available, but no verified native map target exists"
+    end
+    return nil, "no native quest POI or waypoint available"
 end

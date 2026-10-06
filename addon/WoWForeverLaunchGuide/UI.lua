@@ -43,7 +43,7 @@ function ns.UI.Refresh()
         "|cffffd100[Next target]|r",
         target and (target.title .. "\nMap " .. target.map .. "  X " .. target.x .. "  Y " .. target.y) or "No target set.",
         target and (estimate ~= nil and ("Estimated travel: " .. ns.Short(estimate) .. " seconds") or ("Estimated travel unavailable: " .. ns.Short(reason))) or "Use: /wflg target <map> <x> <y> [title]",
-        suggestion and ("Suggested quest target: " .. suggestion.title .. " (quest " .. suggestion.questID .. ")") or ("Suggested quest target: " .. ns.Short(suggestionReason)),
+        suggestion and ("Suggested quest target: " .. suggestion.title .. " (quest " .. suggestion.questID .. "; " .. suggestion.source .. ")") or ("Suggested quest target: " .. ns.Short(suggestionReason)),
         "Use /wflg next to select it.",
         "", "|cffffd100[Navigation]|r", ns.NavigationStatus(),
         "Use /wflg go only when you want SPF to start its arrow and map marker.",

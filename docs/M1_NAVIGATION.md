@@ -5,7 +5,7 @@
 ## Runtime behavior
 
 - A player explicitly saves a next target with `/wflg target <map> <x> <y> [title]`.
-- With QuestieDB installed, `/wflg next` resolves the first mappable active quest objective, or a completed quest's finisher, through the public QuestieDB contract.
+- `/wflg next` resolves the first mappable active quest objective, or a completed quest's turn-in, through Forever's native quest POIs and next-waypoint API.
 - `/wflg go` alone requests navigation from the optional `ShortestPathForever.API.Navigate` public API.
 - Shortest Path Forever owns its arrow and map marker. This addon does not copy or reimplement them.
 - The panel shows the saved target, an SPF travel-time estimate when available, and current target/mouseover NPC IDs.
@@ -25,4 +25,4 @@
 
 ## Deliberate limits
 
-M1 accepts a manually supplied target because guide selection belongs to later routing work. QuestieDB has not been used for a route or copied into this project. The addon only calls Shortest Path Forever at runtime when the player requests it, and only through its documented public API.
+M1 accepts a manually supplied target because guide selection belongs to later routing work. It never treats a QuestieDB zone ID as a Shortest Path Forever `uiMapID`: that relationship is not verified. QuestieDB is neither copied nor used for a route. The addon only calls Shortest Path Forever at runtime when the player requests it, and only through its documented public API.
