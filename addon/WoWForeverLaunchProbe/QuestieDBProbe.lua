@@ -44,6 +44,23 @@ local function entitySummary(entity, id, fields)
         .. (ns.ValueSummary(values[2]) or "unknown") .. ")"
 end
 
+local function recordProbe(probe)
+    if ns.AppendActivity then
+        local quest = probe.quest or {}
+        ns.AppendActivity("QUESTIEDB_PROBE", table.concat({
+            "present=" .. ns.Short(probe.present),
+            "addonLoaded=" .. ns.Short(probe.addonLoaded),
+            "flavor=" .. ns.Short(probe.flavor),
+            "contract=" .. ns.Short(probe.contract),
+            "version=" .. ns.Short(probe.contractVersion),
+            "quest=" .. ns.Short(probe.activeQuestID),
+            "questData=" .. ns.Short(quest.error or "available"),
+            "loadMs=" .. ns.Short(probe.elapsedMs),
+        }, " "))
+    end
+    return probe
+end
+
 function ns.RunQuestieDBProbe()
     local started = type(GetTime) == "function" and GetTime() or 0
     local probe = {
@@ -56,7 +73,7 @@ function ns.RunQuestieDBProbe()
     if not probe.present then
         probe.reason = "LibQuestieDB unavailable"
         ns.snapshot.questieDB = probe
-        return probe
+        return recordProbe(probe)
     end
 
     probe.state = "present"
@@ -115,5 +132,5 @@ function ns.RunQuestieDBProbe()
         probe.previousPresent = WoWForeverLaunchProbeCharDB.questieDBWasPresent
         WoWForeverLaunchProbeCharDB.questieDBWasPresent = probe.present
     end
-    return probe
+    return recordProbe(probe)
 end

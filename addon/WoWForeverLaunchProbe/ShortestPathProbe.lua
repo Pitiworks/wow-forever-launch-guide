@@ -1,5 +1,23 @@
 local _, ns = ...
 
+local function recordProbe(probe)
+    if ns.AppendActivity then
+        ns.AppendActivity("SHORTEST_PATH_PROBE", table.concat({
+            "present=" .. ns.Short(probe.present),
+            "addonLoaded=" .. ns.Short(probe.addonLoaded),
+            "version=" .. ns.Short(probe.version),
+            "Navigate=" .. ns.Short(probe.Navigate),
+            "NavigateRoute=" .. ns.Short(probe.NavigateRoute),
+            "Estimate=" .. ns.Short(probe.Estimate),
+            "estimateResult=" .. ns.Short(probe.estimate),
+            "CurrentStop=" .. ns.Short(probe.CurrentStop),
+            "Ended=" .. ns.Short(probe.Ended),
+            "combat=" .. ns.Short(probe.combat),
+        }, " "))
+    end
+    return probe
+end
+
 function ns.RunShortestPathProbe()
     ns.RefreshSnapshot()
     local root = _G.ShortestPathForever
@@ -12,7 +30,7 @@ function ns.RunShortestPathProbe()
     if not probe.present then
         probe.reason = "ShortestPathForever.API unavailable"
         ns.snapshot.shortestPath = probe
-        return probe
+        return recordProbe(probe)
     end
 
     probe.version = api.version
@@ -46,5 +64,5 @@ function ns.RunShortestPathProbe()
         probe.previousPresent = WoWForeverLaunchProbeCharDB.shortestPathWasPresent
         WoWForeverLaunchProbeCharDB.shortestPathWasPresent = probe.present
     end
-    return probe
+    return recordProbe(probe)
 end
