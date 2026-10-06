@@ -47,4 +47,4 @@ Release-ready vor dem **05.11.2026**.
 
 ## Projektstatus
 
-Initiale M0-Vorbereitung abgeschlossen: Dokumentationsstruktur und Arbeitsregeln sind angelegt. Es existiert noch kein Guide-Code und keine technische Bridge-Festlegung.
+Das minimale M0-Diagnose-Addon ist gebaut und ein erster echter Beta-Lauf ist in [M0_BETA_RESULTS.md](M0_BETA_RESULTS.md) dokumentiert. Der Blizzard-State-Kern ist damit praktisch belegt; die gebündelten Present-Case-Prüfungen für QuestieDB Forever und Shortest Path Forever stehen noch aus. Es existiert weiterhin kein Guide-Code und keine technische Bridge-Festlegung.
