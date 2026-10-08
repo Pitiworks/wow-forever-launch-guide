@@ -72,13 +72,16 @@ local function questieDBAvailable()
     return true
 end
 
-function ns.ResolveSuggestedTarget()
+local function resolve()
     local sawQuest = false
-    for _, quest in ipairs(activeQuests()) do
+    local candidates = {}
+    local quests = ns.guideState and ns.guideState.quests or activeQuests()
+    local allEstimated = true
+    for _, quest in ipairs(quests) do
         sawQuest = true
         local map, x, y, source = nativePoint(quest)
         if map then
-            return {
+            local target = {
                 map = map,
                 x = x,
                 y = y,
@@ -87,7 +90,29 @@ function ns.ResolveSuggestedTarget()
                 questID = quest.id,
                 source = source,
             }
+            local seconds = ns.EstimateTarget and ns.EstimateTarget(target) or nil
+            if type(seconds) ~= "number" or seconds < 0 then
+                allEstimated = false
+                seconds = nil
+            end
+            candidates[#candidates + 1] = { target = target, quest = quest, travel = seconds }
         end
+    end
+    if #candidates > 0 then
+        -- When any estimate is missing, use a consistent work-only comparison.
+        -- Unknown travel must never masquerade as a free trip.
+        for _, candidate in ipairs(candidates) do
+            candidate.score = ns.ScoreQuest and ns.ScoreQuest(candidate.quest, allEstimated and candidate.travel or nil) or 0
+        end
+        table.sort(candidates, function(a, b)
+            if a.score ~= b.score then return a.score < b.score end
+            return a.quest.id < b.quest.id
+        end)
+        local best = candidates[1]
+        best.target.progress = best.quest.progress
+        best.target.reason = (allEstimated and "Reise + geschätzter Restaufwand" or "Restaufwand; Reisevergleich unbekannt")
+            .. (best.quest.progress and best.quest.progress >= 0.5 and not best.quest.complete and "; Abschlussbonus ab 50%" or "")
+        return best.target
     end
     if not sawQuest then
         return nil, "no active quests"
@@ -96,4 +121,14 @@ function ns.ResolveSuggestedTarget()
         return nil, "QuestieDB is available, but no verified native map target exists"
     end
     return nil, "no native quest POI or waypoint available"
+end
+
+local cached, cachedReason, resolved = nil, nil, false
+function ns.InvalidateSuggestion() resolved = false end
+function ns.ResolveSuggestedTarget()
+    if not resolved then
+        cached, cachedReason = resolve()
+        resolved = true
+    end
+    return cached, cachedReason
 end

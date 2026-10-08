@@ -50,4 +50,4 @@ Release-ready vor dem **05.11.2026**.
 
 ## Projektstatus
 
-Das M0-Diagnose-Addon und die Beta-Ergebnisse sind in [M0_BETA_RESULTS.md](M0_BETA_RESULTS.md) dokumentiert. M1 beginnt mit einer optionalen SPF-basierten Navigation für explizit gesetzte Ziele; es existiert weiterhin keine technische Bridge-Festlegung und kein Optimizer.
+Das M0-Diagnose-Addon und die Beta-Ergebnisse sind in [M0_BETA_RESULTS.md](M0_BETA_RESULTS.md) dokumentiert. M1 0.2.0 erweitert die optionale SPF-Navigation um aktuellen Queststand, eine lokale Restaufwand-/Reiseheuristik mit Abschlussbonus ab 50 %, QuestieDB-Mouseover-/Einkaufshinweise und abschaltbare Questdialog-Abgabehilfe. Automatisierte Lua-5.1-Tests bestehen; die neuen Funktionen sind noch nicht im Forever-Client bestätigt. Ein ausführbarer 1–20-Routenplan, globaler Crowd-Optimizer, AH-Abfragen und eine technische Bridge-Festlegung fehlen weiterhin. Bedienung und Grenzen: [M1_NAVIGATION.md](M1_NAVIGATION.md).

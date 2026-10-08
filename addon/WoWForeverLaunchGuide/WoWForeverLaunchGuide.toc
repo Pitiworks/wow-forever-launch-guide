@@ -1,13 +1,16 @@
 ## Interface: 16001
 ## Title: WoW Forever Launch Guide
-## Notes: M1 manual in-game navigation. No bridge, route optimizer, or copied quest data.
+## Notes: Quest assistance, native targets, mouseover hints and optional turn-in help. No bridge or copied quest data.
 ## Author: Pitiworks
-## Version: 0.1.0
-## OptionalDeps: ShortestPathForever
+## Version: 0.2.0
+## OptionalDeps: ShortestPathForever, QuestieDB
 ## SavedVariablesPerCharacter: WoWForeverLaunchGuideCharDB
 
 Core.lua
+GuideState.lua
+QuestHints.lua
 QuestResolver.lua
 Navigation.lua
 CrowdScan.lua
+QuestInteraction.lua
 UI.lua

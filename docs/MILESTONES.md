@@ -31,6 +31,8 @@
 - Questgeber-Erkennung
 - Mob-Erkennung
 - Mouseover-Hinweis
+- QuestieDB-Beziehungen für Tooltip-/Händlerhinweise; ein bedingter Kettenausblick, keine behaupteten AH-Angebote
+- optionale konservative Questdialog-Abgabehilfe; keine Geldkosten, Belohnungsauswahl, Questaufgabe oder automatischen Käufe
 - Karten-/Waypoint-Unterstützung
 - manueller Area-Crowd-Scan: aktuelle Zone und spielrelevanter Levelbereich über eine klickgebundene Who-Abfrage, automatische Auswertung und Speicherung pro Charakter
 

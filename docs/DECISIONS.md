@@ -69,3 +69,11 @@ Dieses ADR-artige Log dokumentiert Architektur- und Projektentscheidungen. Neue 
 **Entscheidung:** Die Zielwahl setzt einen Zustandsabgleich bei Einstieg und Wiederaufnahme voraus. Aktive Objectives, nachweisbare Abgaben und verifizierte Voraussetzungen bestimmen gültige Routenpakete gemeinsam mit Charakterprofil, Level und Position. Fehlende Historie bleibt unknown. Details und Abnahmefälle stehen in [QUEST_ROUTING.md](QUEST_ROUTING.md).
 
 **Auswirkungen:** Kein erzwungenes Nachspielen ab Level 1, keine unzulässigen Kettensprünge und keine Voraussetzung einer lückenlosen Aufzeichnung. Die Umsetzung benötigt noch eine verifizierte Forever-Abschlussabfrage und Ladebereitschaft; diese Entscheidung legt keine Bridge-Technik fest.
+
+## D-013 – Zusammenhängender Ingame-Assistent vor externem Optimizer
+
+**Kontext:** Gewünscht ist ein benutzbarer Questassistent mit Richtung, Mouseover-Hinweisen, Einkaufsvorbereitung und Questabgabe. Der bisherige Vertikalschnitt wählt nur den ersten kartierbaren Questlog-Eintrag.
+
+**Entscheidung:** M1 erhält einen ereignisgesteuerten Queststand, eine erklärbare lokale Zielheuristik für aktive Quests und optionale Abgabehilfe. Die Heuristik kombiniert öffentliche SPF-Reiseschätzungen mit verbleibenden Objective-Einheiten; ab 50 % Fortschritt gilt ein begrenzter Abschlussbonus, kein absolutes Wechselverbot. Sie ist kein XP/h-Optimizer und kein vollständiger 1–20-Routenplan. QuestieDB wird separat installiert und ausschließlich über Contract 2 gelesen: NPC-/Drop-Beziehungen für Tooltips, Händlerhinweise für aktive Quests und einen ausdrücklich bedingten Ein-Schritt-Kettenausblick. Keine fremden Daten oder Implementierungen werden kopiert.
+
+**Auswirkungen:** Abgabehilfe ist abschaltbar und zunächst aus. Sie wirkt nur im vom Spieler geöffneten Questdialog, bei nachweislich aktiver fertiger Quest, ohne Geldkosten und ohne Belohnungsauswahl; Shift pausiert sie. Keine automatische Bewegung, Questaufgabe, Annahme oder Einkäufe. Konkrete Client-APIs werden auf Verfügbarkeit geprüft; die neuen Interaktionen sind bis zur Spielprüfung experimentell. Komplexes Routing und Bridge bleiben separat. Auktionshausangebote, Handelbarkeit und günstigster Händler bleiben unbekannt, solange keine belegte Datenquelle vorliegt.

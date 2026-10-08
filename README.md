@@ -16,6 +16,6 @@ Der Zustand wird immer getrennt pro Charakter geführt. Crowd-Signale wie **Area
 
 ## Aktueller Stand
 
-**M1 – Ingame Navigation:** Die M0-Beta-Probendaten liegen vor. Ein erster separater Navigations-Addon-Schnitt kann ein manuell gesetztes Ziel über die optionale öffentliche Shortest-Path-Forever-API führen; Guide, Optimizer und Live-Bridge sind weiterhin nicht implementiert.
+**M1 – Questassistent 0.2.0:** Aktueller Queststand auch bei spätem Einstieg, Zielheuristik mit Reisezeit und Abschlussbonus ab 50 %, SPF-Pfeil, optionale QuestieDB-Mouseover-/Händlerhinweise und abschaltbare Abgabehilfe im geöffneten Questdialog. Automatisierte Lua-5.1-Tests bestehen; die neuen Funktionen sind noch im Forever-Client zu prüfen. Ausführbare 1–20-Route, globaler Optimizer und Live-Bridge fehlen weiterhin. [Bedienung und Grenzen](docs/M1_NAVIGATION.md).
 
 Die vollständige Projektreferenz befindet sich in [docs/PROJECT_BRAIN.md](docs/PROJECT_BRAIN.md).

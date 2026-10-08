@@ -31,6 +31,7 @@ function ns.GetTarget()
 end
 
 function ns.UseSuggestedTarget()
+    if ns.InvalidateSuggestion then ns.InvalidateSuggestion() end
     local target, reason = ns.ResolveSuggestedTarget()
     if not target then
         ns.Chat("no suggested target: " .. ns.Short(reason))
@@ -38,6 +39,7 @@ function ns.UseSuggestedTarget()
     end
     WoWForeverLaunchGuideCharDB = WoWForeverLaunchGuideCharDB or {}
     WoWForeverLaunchGuideCharDB.target = target
+    if ns.Record then ns.Record("TARGET_SELECTED", target.questID .. " " .. (target.reason or "")) end
     ns.Chat("next quest target selected; use /wflg go to start navigation")
     ns.RefreshUI()
     return true
@@ -62,7 +64,10 @@ function ns.EstimateTarget(target)
         return nil, "unavailable"
     end
     local okMap, map = ns.SafeCall(C_Map.GetBestMapForUnit, "player")
-    local okPosition, position = okMap and ns.SafeCall(C_Map.GetPlayerMapPosition, map, "player")
+    local okPosition, position
+    if okMap then
+        okPosition, position = ns.SafeCall(C_Map.GetPlayerMapPosition, map, "player")
+    end
     if not (okPosition and position and type(position.GetXY) == "function") then
         return nil, "position unavailable"
     end
@@ -89,7 +94,7 @@ function ns.StartNavigation()
         ns.Chat("Shortest Path Forever is unavailable; target remains saved")
         return false
     end
-    local ok, started = ns.SafeCall(path.Navigate, ns.owner, target.map, target.x, target.y, target.title, "objective")
+    local ok, started = ns.SafeCall(path.Navigate, ns.owner, target.map, target.x, target.y, target.title, target.kind or "objective")
     ns.Chat(ok and started and "navigation started" or "Shortest Path Forever rejected the target")
     ns.RefreshUI()
     return ok and started == true
