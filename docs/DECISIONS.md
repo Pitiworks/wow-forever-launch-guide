@@ -53,3 +53,11 @@ Dieses ADR-artige Log dokumentiert Architektur- und Projektentscheidungen. Neue 
 **Entscheidung:** M1 bietet einen sichtbaren Button und den Befehl `/wflg scan`. Nur diese explizite Spieleraktion sendet eine Who-Abfrage für aktuelle Zone sowie Level minus zwei bis Level plus drei. Nach `WHO_LIST_UPDATE` liest das Addon die Treffer automatisch, speichert einen zeitgestempelten Crowd-Sample pro Charakter und kennzeichnet serverseitig begrenzte Ergebnisse als Untergrenze.
 
 **Auswirkungen:** Das Addon liefert eine nachvollziehbare Momentaufnahme der Konkurrenz für das Startgebiet, nicht die exakte Zahl aller Spieler in Questreichweite. M4 kann diese Samples später mit Questfortschritt und alternativen Routen kombinieren.
+
+## D-011 – Redaktionelle Grundroute vor dynamischer Optimierung
+
+**Kontext:** Live-Crowd-Signale allein liefern weder Questabhängigkeiten noch ein vollständiges Levelingprogramm. Wowhead-Forever-Seiten und historische Kommentare geben Kandidaten und Risiken vor; eigene Beta-Daten bestätigen bereits mehrere Tirisfal-Quests.
+
+**Entscheidung:** [LAUNCH_ROUTE.md](LAUNCH_ROUTE.md) legt v0.1 für ein Untoten-Profil fest: Deathknell, Brill mit Tirisfal-Schleifen, Sepulcher/Silverpine; Barrens als vorbereiteter Ausweichast. Ein künftiger Optimizer wählt unter gültigen vorbereiteten Paketen. Kommentare bleiben verknüpfte Recherchehinweise, QuestieDB liefert strukturierte Laufzeitdaten. Die Route wird bereits während M1 redaktionell vorbereitet; ihre Prüfung und vollständige XP-Abdeckung bleiben M4/M5-Arbeit.
+
+**Auswirkungen:** Wir können konkrete nächste Schritte bauen und testen, ohne fertigen Optimizer oder Bridge abzuwarten. v0.1 ist keine vollständig validierte 1–20-Route. Rassen-/Klassenprofile, Kettensperren, sichere Gegnerlevel und tatsächliche Reisekosten müssen vor Freigabe geprüft werden.

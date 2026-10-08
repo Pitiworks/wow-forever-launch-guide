@@ -52,6 +52,8 @@
 
 ## M4 – Crowd Optimizer
 
+Redaktionelle Grundlage: [Launch Route v0.1](LAUNCH_ROUTE.md). Questabhängigkeiten, Paketwechsel und Rückkehrpunkte werden vor dynamischer Optimierung festgelegt.
+
 - QuestieDB Forever
 - Questabhängigkeiten
 - Folgequests

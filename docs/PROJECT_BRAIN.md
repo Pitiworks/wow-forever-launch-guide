@@ -28,6 +28,8 @@ WoW-Forever-Addon → Live State / Bridge → lokaler Guide / Optimizer → HTML
 
 ## Aktueller Fokus: M1
 
+Die redaktionelle Grundroute v0.1 ist in [LAUNCH_ROUTE.md](LAUNCH_ROUTE.md) festgelegt: Untoten-Profil über Deathknell → Brill/Tirisfal-Schleifen → Silverpine, mit Barrens als vorbereitetem Ausweichast. Sie beruht auf Wowhead-Recherche und unseren Beta-Beobachtungen; vollständige XP-Abdeckung, Voraussetzungen und ausführbarer Guide sind noch offen. Crowd-Signale sollen zwischen vorbereiteten gültigen Paketen wählen, nicht erst spontan eine Route erfinden.
+
 M0 hat die Blizzard-State-APIs und die beiden optionalen Addon-Contracts im echten Forever-Client messbar gemacht. M1 baut darauf eine kleine Ingame-Navigation auf. Keine Bridge-Technik wird vor einer gesonderten, dokumentierten Entscheidung festgelegt.
 
 ## Definition of Done: M0

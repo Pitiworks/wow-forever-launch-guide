@@ -2,6 +2,8 @@
 
 Dieses Dokument hält die Bewertungsdimensionen fest, ohne bereits eine finale Formel festzulegen.
 
+Die konkrete Grundroute, Questprioritäten, Quellen-/Kommentarbewertung und erste Wechselregeln stehen in [LAUNCH_ROUTE.md](LAUNCH_ROUTE.md). v0.1 gilt für einen Untoten-Start; sie ist redaktionell festgelegt, aber noch nicht als vollständiger 1–20-Guide validiert oder im Addon implementiert.
+
 ## Normale Questbewertung
 
 - XP
