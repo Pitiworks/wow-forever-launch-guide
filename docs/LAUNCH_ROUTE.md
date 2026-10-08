@@ -1,6 +1,6 @@
 # Launch Route v0.1 – Horde / Tirisfal
 
-Stand: 08.10.2026. Recherche und redaktionelle Routenentscheidung; noch kein ausführbarer Guide.
+Stand: 08.10.2026. Recherche und redaktionelle Routenentscheidung. Erste ausführbare Pakete sind in Addon 0.3.0 enthalten; vollständige XP-Abdeckung und Client-Validierung fehlen.
 
 ## Entscheidung und Reichweite
 
@@ -81,8 +81,8 @@ Priorität ist unsere Ableitung aus Mechanik und Wegeüberlappung, keine behaupt
 
 ## Umsetzung und offene Abdeckung
 
-Die nächste Umsetzung erhält einen eigenen, redaktionellen Routenplan aus Quest-IDs, Paket-Reihenfolge, Bedingungen, Alternativen und Rückkehrpunkten. Namen, Objectives, NPCs, Spawns und Voraussetzungen werden über den öffentlichen QuestieDB-Contract gelesen; keine kopierte Questdatenbank. Native Quest-POIs/SPF liefern weiterhin die Navigation. Quest-Reihenfolge entspricht anschließend dem Plan, nicht mehr dem ersten Eintrag im Questlog.
+`RoutePlan.lua`, `RouteState.lua` und `GuideController.lua` implementieren in 0.3.0 erste redaktionelle Pakete, konservative Voraussetzungen, aktuelle Zustandsübernahme und Annahme-/Objective-/Abgabeschritte. Der Plan speichert Quest-IDs und eigene Reihenfolge/Fenster, keine kopierte Questdatenbank. Zusätzliche Zwischenschritte 376/380/381/383, 423 und 478/481/482 wurden anhand von `data/Forever/foreverQuestDB.lua` im separat vorhandenen QuestieDB-Checkout identifiziert. Namen, NPCs, Spawns und Voraussetzungen werden zur Laufzeit gelesen. Native POIs bleiben bevorzugt; der experimentelle öffentliche Support-Mapping-Adapter ist in D-014 dokumentiert. Guide-Modus wird einmal je Sitzung ausdrücklich gestartet. Mehrere gültige Schritte werden mit einer lokalen Reise-/Restaufwand-Heuristik bewertet, Gleichstände anhand des Plans statt Questlog-Reihenfolge gelöst. Details: [M1_NAVIGATION.md](M1_NAVIGATION.md).
 
-Danach folgt eine automatisch gespeicherte Auswertung pro Paket: aktive Bearbeitungszeit, Objective-Deltas, erreichte XP, Reisen, Todesfälle und begründete Wechsel. Das ist **noch nicht implementiert**. Der aktuelle Who-Scan speichert nur den letzten Crowd-Sample; er misst keine Mobpopulation und noch keine Quest-Effizienz.
+0.3.0 speichert automatisch eine strukturierte Selbstauswertung mit Routenstatus, Build/Charakter/Level/XP, Dependency-Status, Zielquelle, beobachtbaren möglichen Questgegnern, bestätigten Abgaben und eigenem Fehlerprotokoll. Eine vollständige Effizienzauswertung pro Paket mit aktiver Bearbeitungszeit, Reisen, AFK-/Todesbereinigung und kalibrierten Objective-Kosten fehlt weiterhin. Der Who-Scan speichert den letzten Crowd-Sample; er misst keine Mobpopulation. Sichtungsdaten lösen keine automatischen Blockaden oder Gebietswechsel aus. Zum Beurteilen der neuen Interaktionen und räumlichen Zielrichtigkeit ist als Nächstes eine echte Spielaufzeichnung mit 0.3.0 erforderlich.
 
 Vor einem freigegebenen 1–20-Guide fehlen insbesondere: aktueller Forever-Prerequisite-Abgleich aller eingeplanten Schritte, identifizierte neue Tirisfal-Quests aus unserer Beta, sichere Moblevel/klassenspezifische Anforderungen, vollständige XP-Bilanz auch bei ausgelassenen Ketten, funktionierender Ersatz bei völlig blockiertem Deathknell und vollständige Barrens-Ausweichpakete. Diese Lücken ändern nicht die festgelegte Grundrichtung, aber verhindern die Behauptung „schnellste fertige Route“.

@@ -53,4 +53,11 @@ events.scripts.OnEvent(events, "QUEST_COMPLETE") -- absent interaction APIs, no 
 drain()
 events.scripts.OnEvent(events, "UPDATE_MOUSEOVER_UNIT")
 assert(#WoWForeverLaunchGuideCharDB.report >= 2)
+assert(WoWForeverLaunchGuideCharDB.evaluation.version == "0.3.0")
+ns.ReconcileGuide = function() error("intentional test failure") end
+ns.guideRunning = true
+events.scripts.OnEvent(events, "QUEST_LOG_UPDATE")
+drain()
+assert(not ns.guideRunning and ns.lastAddonError:find("intentional test failure", 1, true))
+assert(WoWForeverLaunchGuideCharDB.report[#WoWForeverLaunchGuideCharDB.report].event == "ADDON_ERROR")
 print("m1_guide_ui_spec: ok")

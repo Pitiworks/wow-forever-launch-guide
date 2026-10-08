@@ -5,6 +5,7 @@ Run from the repository root: python3 tools/run_lua_tests.py
 """
 import ctypes
 import ctypes.util
+import os
 from pathlib import Path
 
 
@@ -41,4 +42,6 @@ if __name__ == "__main__":
         run(source, False)
     for spec in specs:
         run(spec, True)
+    if os.environ.get("WFLG_QUESTIEDB_PATH"):
+        run(Path("tests/integration_questiedb.lua"), True)
     print(f"PASS: {len(sources)} Lua 5.1 syntax checks, {len(specs)} isolated test suites")

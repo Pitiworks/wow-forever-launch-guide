@@ -14,6 +14,7 @@ function ns.SetTarget(map, x, y, title)
         ns.Chat("target rejected: map must be positive and coordinates must be between 0 and 1")
         return false
     end
+    ns.guideRunning = false
     WoWForeverLaunchGuideCharDB = WoWForeverLaunchGuideCharDB or {}
     WoWForeverLaunchGuideCharDB.target = {
         map = map,
@@ -79,24 +80,34 @@ function ns.EstimateTarget(target)
     return ok and seconds or nil, ok and reason or "estimate error"
 end
 
-function ns.StartNavigation()
+function ns.StartNavigation(quiet)
     local target = ns.GetTarget()
     if not target then
-        ns.Chat("set a target first: /wflg target <map> <x> <y> [title]")
+        if not quiet then ns.Chat("set a target first: /wflg target <map> <x> <y> [title]") end
         return false
     end
     if type(InCombatLockdown) == "function" and InCombatLockdown() then
-        ns.Chat("navigation is not started during combat")
+        if not quiet then ns.Chat("navigation is not started during combat") end
         return false
     end
     local path = api()
     if not (path and type(path.Navigate) == "function") then
-        ns.Chat("Shortest Path Forever is unavailable; target remains saved")
+        if not quiet then ns.Chat("Shortest Path Forever is unavailable; target remains saved") end
         return false
     end
-    local ok, started = ns.SafeCall(path.Navigate, ns.owner, target.map, target.x, target.y, target.title, target.kind or "objective")
-    ns.Chat(ok and started and "navigation started" or "Shortest Path Forever rejected the target")
-    ns.RefreshUI()
+    local ok, started
+    if ns.guideRunning and type(path.NavigateRoute) == "function" then
+        ok, started = ns.SafeCall(path.NavigateRoute, ns.owner, { {
+            map = target.map, x = target.x, y = target.y, title = target.title,
+            kind = target.kind or "objective", questID = target.questID, hold = true,
+        } })
+    else
+        ok, started = ns.SafeCall(path.Navigate, ns.owner, target.map, target.x, target.y, target.title, target.kind or "objective")
+    end
+    if not quiet then
+        ns.Chat(ok and started and "navigation started" or "Shortest Path Forever rejected the target")
+        ns.RefreshUI()
+    end
     return ok and started == true
 end
 

@@ -29,7 +29,7 @@ WoW-Forever-Addon → Live State / Bridge → lokaler Guide / Optimizer → HTML
 
 ## Aktueller Fokus: M1
 
-Die redaktionelle Grundroute v0.1 ist in [LAUNCH_ROUTE.md](LAUNCH_ROUTE.md) festgelegt: Untoten-Profil über Deathknell → Brill/Tirisfal-Schleifen → Silverpine, mit Barrens als vorbereitetem Ausweichast. Sie beruht auf Wowhead-Recherche und unseren Beta-Beobachtungen; vollständige XP-Abdeckung, Voraussetzungen und ausführbarer Guide sind noch offen. Crowd-Signale sollen zwischen vorbereiteten gültigen Paketen wählen, nicht erst spontan eine Route erfinden.
+Die redaktionelle Grundroute v0.1 ist in [LAUNCH_ROUTE.md](LAUNCH_ROUTE.md) festgelegt: Untoten-Profil über Deathknell → Brill/Tirisfal-Schleifen → Silverpine, mit Barrens als vorbereitetem Ausweichast. M1 0.3.0 enthält erste ausführbare Pakete und konservative Voraussetzungssperren; vollständige XP-Abdeckung und echte Client-Validierung bleiben offen. Crowd-Signale sollen zwischen vorbereiteten gültigen Paketen wählen, nicht erst spontan eine Route erfinden.
 
 M0 hat die Blizzard-State-APIs und die beiden optionalen Addon-Contracts im echten Forever-Client messbar gemacht. M1 baut darauf eine kleine Ingame-Navigation auf. Keine Bridge-Technik wird vor einer gesonderten, dokumentierten Entscheidung festgelegt.
 
@@ -50,4 +50,4 @@ Release-ready vor dem **05.11.2026**.
 
 ## Projektstatus
 
-Das M0-Diagnose-Addon und die Beta-Ergebnisse sind in [M0_BETA_RESULTS.md](M0_BETA_RESULTS.md) dokumentiert. M1 0.2.0 erweitert die optionale SPF-Navigation um aktuellen Queststand, eine lokale Restaufwand-/Reiseheuristik mit Abschlussbonus ab 50 %, QuestieDB-Mouseover-/Einkaufshinweise und abschaltbare Questdialog-Abgabehilfe. Automatisierte Lua-5.1-Tests bestehen; die neuen Funktionen sind noch nicht im Forever-Client bestätigt. Ein ausführbarer 1–20-Routenplan, globaler Crowd-Optimizer, AH-Abfragen und eine technische Bridge-Festlegung fehlen weiterhin. Bedienung und Grenzen: [M1_NAVIGATION.md](M1_NAVIGATION.md).
+Das M0-Diagnose-Addon und die Beta-Ergebnisse sind in [M0_BETA_RESULTS.md](M0_BETA_RESULTS.md) dokumentiert. M1 0.3.0 besitzt ausführbare Untoten-Routenpakete, Annahme-/Objective-/Abgabeschritte, sitzungsgebundene automatische SPF-Schrittfolge, Voraussetzungssperren, spätes Einsteigen, Abschlussbonus und Wechselhysterese, Mouseover-/Einkaufshinweise, beobachtbare Questgegner und optionale Questdialog-Abgabehilfe. Die strukturierte Selbstauswertung wird automatisch gespeichert. 21 Lua-5.1-Syntaxprüfungen, sieben isolierte Suiten und ein optionaler QuestieDB-Basisdaten-/Mapping-Abgleich bestehen. Echte Client-Kompatibilität und räumliche Richtigkeit der neuen Schritte sind noch unknown; eine normale Spielaufzeichnung mit 0.3.0 ist dafür erforderlich. Vollständige 1–20-XP-Abdeckung, kalibrierter Crowd-Optimizer, AH-Abfragen und Bridge-Festlegung fehlen weiterhin. Bedienung und Grenzen: [M1_NAVIGATION.md](M1_NAVIGATION.md).

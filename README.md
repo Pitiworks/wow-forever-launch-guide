@@ -16,6 +16,6 @@ Der Zustand wird immer getrennt pro Charakter geführt. Crowd-Signale wie **Area
 
 ## Aktueller Stand
 
-**M1 – Questassistent 0.2.0:** Aktueller Queststand auch bei spätem Einstieg, Zielheuristik mit Reisezeit und Abschlussbonus ab 50 %, SPF-Pfeil, optionale QuestieDB-Mouseover-/Händlerhinweise und abschaltbare Abgabehilfe im geöffneten Questdialog. Automatisierte Lua-5.1-Tests bestehen; die neuen Funktionen sind noch im Forever-Client zu prüfen. Ausführbare 1–20-Route, globaler Optimizer und Live-Bridge fehlen weiterhin. [Bedienung und Grenzen](docs/M1_NAVIGATION.md).
+**M1 – experimenteller Questassistent 0.3.0:** Erste ausführbare Untoten-Routenpakete mit Annahme-/Objective-/Abgabeschritten und automatischer SPF-Schrittfolge nach Klick auf „Guide starten“. Dazu später Einstieg, Voraussetzungssperren, Abschlussbonus ab 50 %, vorsichtige Zielwechsel, Mouseover-/Händlerhinweise, beobachtbare Questgegner, optionale Abgabehilfe und automatisch gespeicherte Selbstauswertung. 21 Lua-5.1-Syntaxprüfungen, sieben Testsuiten und ein optionaler QuestieDB-Basisdaten-/Mapping-Abgleich bestehen. Die neuen Funktionen und Koordinaten sind im Forever-Client noch zu bestätigen. Vollständige 1–20-XP-Abdeckung, globaler Crowd-Optimizer und Live-Bridge fehlen weiterhin. [Bedienung und Grenzen](docs/M1_NAVIGATION.md).
 
 Die vollständige Projektreferenz befindet sich in [docs/PROJECT_BRAIN.md](docs/PROJECT_BRAIN.md).

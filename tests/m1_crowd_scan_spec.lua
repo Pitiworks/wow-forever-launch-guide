@@ -4,6 +4,7 @@ local function reset()
     _G.GetZoneText = nil
     _G.UnitLevel = nil
     _G.time = nil
+    _G.C_Timer = nil
     _G.WoWForeverLaunchGuideCharDB = {}
 end
 
@@ -61,5 +62,19 @@ assert(capped.ns.ScanCurrentArea())
 capped.ns.OnWhoListUpdate()
 sample = WoWForeverLaunchGuideCharDB.crowd
 assert(sample.count == 50 and sample.capped and sample.status == "very high (server result limit)")
+
+reset()
+local timeout
+capped.C_FriendList.GetNumWhoResults = function() return 1 end -- some clients omit total
+capped.C_Timer = { After = function(seconds, fn) assert(seconds == 30); timeout = fn end }
+loadCrowd(capped)
+assert(capped.ns.ScanCurrentArea())
+capped.ns.OnWhoListUpdate()
+assert(WoWForeverLaunchGuideCharDB.crowd.count == 1 and not WoWForeverLaunchGuideCharDB.crowd.capped)
+assert(capped.ns.ScanCurrentArea())
+timeout()
+assert(not capped.ns.CrowdScanPending())
+capped.C_FriendList.SendWho = function() error("restricted") end
+assert(not capped.ns.ScanCurrentArea() and not capped.ns.CrowdScanPending())
 
 print("m1_crowd_scan_spec: ok")

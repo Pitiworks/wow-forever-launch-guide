@@ -70,7 +70,23 @@ function ns.ScanCurrentArea()
     local queryZone = zone:gsub('"', "")
     local filter = 'z-"' .. queryZone .. '" ' .. minimum .. "-" .. maximum
     pending = { zone = zone, minimum = minimum, maximum = maximum, filter = filter }
-    api.SendWho(filter)
+    local sent = ns.SafeCall(api.SendWho, filter)
+    if not sent then
+        pending = nil
+        ns.Chat("Who-Abfrage nicht möglich; bitte später über den Button erneut versuchen.")
+        return false
+    end
+    if C_Timer and type(C_Timer.After) == "function" then
+        local request = pending
+        C_Timer.After(30, function()
+            if pending == request then
+                pending = nil
+                if ns.Record then ns.Record("WHO_TIMEOUT", request.zone) end
+                ns.Chat("Who-Abfrage ohne Antwort; neuer Scan ist wieder möglich.")
+                ns.RefreshUI()
+            end
+        end)
+    end
     ns.Chat("area scan requested for " .. zone .. " (levels " .. minimum .. "-" .. maximum .. ")")
     ns.RefreshUI()
     return true
@@ -100,7 +116,7 @@ function ns.OnWhoListUpdate()
             matching = matching + 1
         end
     end
-    local capped = returned >= 50 or total >= 50
+    local capped = returned >= 50 or (type(total) == "number" and total >= 50)
     WoWForeverLaunchGuideCharDB = WoWForeverLaunchGuideCharDB or {}
     WoWForeverLaunchGuideCharDB.crowd = {
         zone = pending.zone,

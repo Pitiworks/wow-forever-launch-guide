@@ -31,7 +31,7 @@ end
 
 -- Forever exposes active quest destinations as native POIs and next waypoints. Their uiMapID
 -- and normalized coordinates are already in the exact form required by Shortest Path Forever.
-local function nativePoint(quest)
+local function nativePoint(quest, pickup)
     if type(GetQuestUiMapID) ~= "function" then
         return nil
     end
@@ -44,14 +44,14 @@ local function nativePoint(quest)
         local poisOK, pois = ns.SafeCall(C_QuestLog.GetQuestsOnMap, map)
         if poisOK and type(pois) == "table" then
             for _, poi in ipairs(pois) do
-                if type(poi) == "table" and poi.questID == quest.id and not poi.isQuestStart and validPoint(map, poi.x, poi.y) then
+                if type(poi) == "table" and poi.questID == quest.id and (pickup and poi.isQuestStart or not pickup and not poi.isQuestStart) and validPoint(map, poi.x, poi.y) then
                     return map, poi.x, poi.y, "native quest POI"
                 end
             end
         end
     end
 
-    if C_QuestLog and type(C_QuestLog.GetNextWaypoint) == "function" then
+    if not pickup and C_QuestLog and type(C_QuestLog.GetNextWaypoint) == "function" then
         local waypointOK, waypointMap, x, y = ns.SafeCall(C_QuestLog.GetNextWaypoint, quest.id)
         if waypointOK and validPoint(waypointMap, x, y) then
             return waypointMap, x, y, "native quest waypoint"
@@ -77,6 +77,24 @@ local function resolve()
     local candidates = {}
     local quests = ns.guideState and ns.guideState.quests or activeQuests()
     local allEstimated = true
+    ns.routeSteps, ns.routeReason = {}, nil
+    if ns.BuildRouteState then ns.routeSteps, ns.routeReason = ns.BuildRouteState() end
+    local currentMapOK, currentMap = ns.SafeCall(C_Map and C_Map.GetBestMapForUnit, "player")
+    local function candidate(quest, target)
+        local deferred = WoWForeverLaunchGuideCharDB and WoWForeverLaunchGuideCharDB.deferred
+        local untilTime = deferred and deferred[quest.id]
+        local now = type(time) == "function" and time() or 0
+        if type(untilTime) == "number" and untilTime > now then return end
+        local seconds = ns.EstimateTarget and ns.EstimateTarget(target) or nil
+        if type(seconds) ~= "number" or seconds < 0 or seconds ~= seconds or seconds == math.huge then seconds = nil end
+        -- No speculative inter-zone detours when SPF cannot establish a route.
+        if quest.pickup and seconds == nil and (not currentMapOK or target.map ~= currentMap) then return end
+        if seconds == nil then allEstimated = false end
+        local packet, order
+        if ns.RouteStep then packet, order = ns.RouteStep(quest.id) end
+        target.packet = packet and packet.label
+        candidates[#candidates + 1] = { target = target, quest = quest, travel = seconds, order = order or 99999 }
+    end
     for _, quest in ipairs(quests) do
         sawQuest = true
         local map, x, y, source = nativePoint(quest)
@@ -90,12 +108,25 @@ local function resolve()
                 questID = quest.id,
                 source = source,
             }
-            local seconds = ns.EstimateTarget and ns.EstimateTarget(target) or nil
-            if type(seconds) ~= "number" or seconds < 0 then
-                allEstimated = false
-                seconds = nil
+            candidate(quest, target)
+        elseif quest.complete and ns.DBQuestGiverPoints then
+            for _, point in ipairs(ns.DBQuestGiverPoints(quest.id, true)) do
+                point.title, point.kind, point.questID = (quest.name or tostring(quest.id)) .. " — abgeben", "turnin", quest.id
+                candidate(quest, point)
             end
-            candidates[#candidates + 1] = { target = target, quest = quest, travel = seconds }
+        end
+    end
+    for _, step in ipairs(ns.routeSteps) do
+        if step.status == "candidate" then
+            local quest = { id = step.questID, name = step.name, pickup = true }
+            local map, x, y, source = nativePoint(quest, true)
+            local points = map and { { map = map, x = x, y = y, source = source } }
+                or (ns.DBQuestGiverPoints and ns.DBQuestGiverPoints(quest.id, false) or {})
+            for _, point in ipairs(points) do
+                point.title, point.kind, point.questID = step.name .. " — annehmen (Angebot prüfen)", "pickup", quest.id
+                candidate(quest, point)
+            end
+            if #points == 0 then step.reason = step.reason .. "; kein belegter Kartenpunkt" end
         end
     end
     if #candidates > 0 then
@@ -106,14 +137,19 @@ local function resolve()
         end
         table.sort(candidates, function(a, b)
             if a.score ~= b.score then return a.score < b.score end
+            if a.order ~= b.order then return a.order < b.order end
             return a.quest.id < b.quest.id
         end)
+        ns.guideCandidates = candidates
         local best = candidates[1]
         best.target.progress = best.quest.progress
         best.target.reason = (allEstimated and "Reise + geschätzter Restaufwand" or "Restaufwand; Reisevergleich unbekannt")
             .. (best.quest.progress and best.quest.progress >= 0.5 and not best.quest.complete and "; Abschlussbonus ab 50%" or "")
+            .. (not best.quest.complete and not best.quest.pickup and best.quest.progress == nil and "; Fortschritt unbekannt, Platzhalterkosten" or "")
+        best.target.score, best.target.comparableTravel = best.score, allEstimated
         return best.target
     end
+    ns.guideCandidates = {}
     if not sawQuest then
         return nil, "no active quests"
     end
@@ -127,7 +163,9 @@ local cached, cachedReason, resolved = nil, nil, false
 function ns.InvalidateSuggestion() resolved = false end
 function ns.ResolveSuggestedTarget()
     if not resolved then
+        local started = type(debugprofilestop) == "function" and debugprofilestop() or nil
         cached, cachedReason = resolve()
+        ns.plannerMilliseconds = started and (debugprofilestop() - started) or nil
         resolved = true
     end
     return cached, cachedReason

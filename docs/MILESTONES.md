@@ -25,6 +25,7 @@
 ## M1 – Ingame Navigation
 
 - Nächstes Ziel
+- ausführbare redaktionelle Untoten-Pakete: Annahme, Objectives, Abgabe; automatische SPF-Schrittfolge nach ausdrücklichem Start je Sitzung
 - Zustandsabgleich als Grundlage der Zielwahl bei späterem Einstieg, Login/Reload und Charakterwechsel; kein vorausgesetzter Start auf Level 1
 - Pfeil
 - Entfernung
@@ -35,6 +36,7 @@
 - optionale konservative Questdialog-Abgabehilfe; keine Geldkosten, Belohnungsauswahl, Questaufgabe oder automatischen Käufe
 - Karten-/Waypoint-Unterstützung
 - manueller Area-Crowd-Scan: aktuelle Zone und spielrelevanter Levelbereich über eine klickgebundene Who-Abfrage, automatische Auswertung und Speicherung pro Charakter
+- beobachtbare Questgegner und strukturierte automatische Selbstauswertung; kein behaupteter Gebiets-/Layer-Radar
 
 ## M2 – Bridge
 

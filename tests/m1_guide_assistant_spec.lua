@@ -19,7 +19,8 @@ C_QuestLog = {
     GetInfo = function(i) return infos[i] end,
     IsComplete = function(id) return id == 375 and readyQuest end,
     GetQuestObjectives = function(id)
-        return { { numRequired = 10, numFulfilled = id == 375 and 5 or 1, finished = false } }
+        return { { numRequired = 10, numFulfilled = id == 375 and 5 or 1, finished = false,
+            type = id == 375 and "item" or "monster", text = id == 375 and "Faden: 5/10" or "Gnolle: 1/10" } }
     end,
 }
 local stale = { questID = 404 }
@@ -32,13 +33,20 @@ assert(ns.guideState.quests[2].progress == 0.5)
 assert(ns.ScoreQuest({ remaining = 5, progress = 0.5 }, 10) == 85)
 assert(ns.ScoreQuest({ remaining = 5, progress = 0.49 }, 10) == 110)
 assert(ns.ScoreQuest({ remaining = 0, complete = true }, 100) == 100)
+local originalInfo = C_QuestLog.GetInfo
+C_QuestLog.GetInfo = function() error("not loaded") end
+stale = { questID = 426 }
+ns.ReconcileGuide()
+assert(not ns.guideState.logReady and stale and cleared == 1)
+C_QuestLog.GetInfo = originalInfo
+stale = nil
 completed = nil
 ns.ReconcileGuide()
 assert(not ns.guideState.ready and #ns.guideState.quests == 2)
 
 local data = {
     Quest = {
-        [375] = { name = "Felle", finishedBy = { { 900 } }, objectives = { [3] = { { 100, nil, 5 }, { 200, nil, 1 } } }, nextQuestInChain = 376 },
+        [375] = { name = "Felle", finishedBy = { { 900 } }, objectives = { [3] = { { 100 }, { 200, nil, 99999 } } }, nextQuestInChain = 376 },
         [376] = { name = "Folge", objectives = { [3] = { { 300, nil, 2 } } } },
         [358] = { objectives = { [1] = { { 901, nil, 8 } } } },
     },
@@ -60,12 +68,13 @@ GetItemCount = function() return 0 end
 ns.InvalidateHints()
 assert(#ns.NPCHints(901) == 1 and #ns.NPCHints(902) == 1 and #ns.NPCHints(999) == 0)
 assert(#ns.ShoppingHints() == 1) -- unknown history suppresses future look-ahead
+assert(ns.ShoppingHints()[1]:find("10x", 1, true) and not ns.ShoppingHints()[1]:find("99999", 1, true))
 completed = { 363 }
 ns.ReconcileGuide()
 assert(#ns.ShoppingHints() == 2)
 GetItemCount = function() return 100 end
 ns.InvalidateHints()
-assert(#ns.ShoppingHints() == 0)
+assert(#ns.ShoppingHints() == 1) -- future quantity stays unknown, regardless of owned count
 accept = false
 ns.InvalidateHints()
 assert(#ns.NPCHints(901) == 0 and #ns.ShoppingHints() == 0)

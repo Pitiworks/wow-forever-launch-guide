@@ -26,6 +26,7 @@ function ns.ReadQuestState()
     state.logReady = true
     for index = 1, count do
         local infoOK, info = ns.SafeCall(C_QuestLog.GetInfo, index)
+        if not infoOK or type(info) ~= "table" or (not info.isHeader and not info.questID) then state.logReady = false end
         if infoOK and type(info) == "table" and not info.isHeader and info.questID then
             local completeOK, complete = ns.SafeCall(C_QuestLog.IsComplete, info.questID)
             local objectivesOK, objectives = ns.SafeCall(C_QuestLog.GetQuestObjectives, info.questID)
@@ -75,7 +76,9 @@ function ns.ReconcileGuide()
         for _, q in ipairs(ns.guideState.quests) do
             if q.id == target.questID then found = true end
         end
-        if ns.guideState.logReady and ns.guideState.ready and not found then
+        local validPickup = target.kind == "pickup" and ns.QuestEligibility
+            and ns.QuestEligibility(target.questID, ns.guideState, ns.ReadRoutePlayer()) == "candidate"
+        if ns.guideState.logReady and ns.guideState.ready and not found and not validPickup then
             -- Never leave the player following an abandoned or already turned-in quest.
             ns.ClearTarget()
             ns.Record("STALE_TARGET_CLEARED", target.questID)
@@ -86,7 +89,7 @@ end
 -- Heuristic seconds, not measured kill time or XP/h. Never compare quests with
 -- known travel costs against quests whose travel cost is unavailable.
 function ns.ScoreQuest(quest, travel)
-    local work = quest.complete and 0 or math.max(1, quest.remaining or 4) * 20
+    local work = quest.complete and 0 or (quest.pickup and 30 or math.max(1, quest.remaining or 4) * 20)
     if not quest.complete and quest.progress and quest.progress >= 0.5 then
         work = work * 0.75
     end

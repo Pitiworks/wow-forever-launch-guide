@@ -2,15 +2,21 @@
 ## Title: WoW Forever Launch Guide
 ## Notes: Quest assistance, native targets, mouseover hints and optional turn-in help. No bridge or copied quest data.
 ## Author: Pitiworks
-## Version: 0.2.0
+## Version: 0.3.0
 ## OptionalDeps: ShortestPathForever, QuestieDB
 ## SavedVariablesPerCharacter: WoWForeverLaunchGuideCharDB
 
 Core.lua
 GuideState.lua
 QuestHints.lua
+RoutePlan.lua
+DBCoordinates.lua
+RouteState.lua
 QuestResolver.lua
 Navigation.lua
+GuideController.lua
+UnitObservations.lua
+RuntimeReport.lua
 CrowdScan.lua
 QuestInteraction.lua
 UI.lua
