@@ -25,6 +25,7 @@
 ## M1 – Ingame Navigation
 
 - Nächstes Ziel
+- Zustandsabgleich als Grundlage der Zielwahl bei späterem Einstieg, Login/Reload und Charakterwechsel; kein vorausgesetzter Start auf Level 1
 - Pfeil
 - Entfernung
 - Questgeber-Erkennung
@@ -64,6 +65,7 @@ Redaktionelle Grundlage: [Launch Route v0.1](LAUNCH_ROUTE.md). Questabhängigkei
 - Sammelquest-Risk
 - Alternative Gebiete
 - Rerouting
+- Einstiegspunkt aus Level, Position, aktiven Objectives, abgegebenen Quests und verifizierten Voraussetzungen bestimmen; unbekannte Historie nicht als unerledigt behandeln
 
 ## M5 – Release 1–20
 

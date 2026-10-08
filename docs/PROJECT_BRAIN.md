@@ -16,6 +16,7 @@ WoW Forever Launch Guide führt Spieler dynamisch von Level 1 bis 20. Es optimie
 
 - GitHub ist Projektgedächtnis und Code-Historie.
 - Zustand wird pro Charakter gespeichert.
+- Einstieg und Wiedereinstieg sind auf jedem Level innerhalb 1–20 möglich: Der Guide gleicht den aktuellen Charakter-/Queststand ab, statt einen Start auf Level 1 oder eine vollständig mitgeloggte Historie vorauszusetzen. Details: [QUEST_ROUTING.md](QUEST_ROUTING.md).
 - Die Ingame-Navigation bleibt im Addon; komplexes Routing bleibt außerhalb von WoW.
 - Die Live-Bridge wird erst nach Beta-Messungen entschieden.
 - SavedVariables gelten nicht automatisch als Live-Lösung.

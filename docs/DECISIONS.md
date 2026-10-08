@@ -61,3 +61,11 @@ Dieses ADR-artige Log dokumentiert Architektur- und Projektentscheidungen. Neue 
 **Entscheidung:** [LAUNCH_ROUTE.md](LAUNCH_ROUTE.md) legt v0.1 für ein Untoten-Profil fest: Deathknell, Brill mit Tirisfal-Schleifen, Sepulcher/Silverpine; Barrens als vorbereiteter Ausweichast. Ein künftiger Optimizer wählt unter gültigen vorbereiteten Paketen. Kommentare bleiben verknüpfte Recherchehinweise, QuestieDB liefert strukturierte Laufzeitdaten. Die Route wird bereits während M1 redaktionell vorbereitet; ihre Prüfung und vollständige XP-Abdeckung bleiben M4/M5-Arbeit.
 
 **Auswirkungen:** Wir können konkrete nächste Schritte bauen und testen, ohne fertigen Optimizer oder Bridge abzuwarten. v0.1 ist keine vollständig validierte 1–20-Route. Rassen-/Klassenprofile, Kettensperren, sichere Gegnerlevel und tatsächliche Reisekosten müssen vor Freigabe geprüft werden.
+
+## D-012 – Einstieg über aktuellen Zustand statt aufgezeichnete Historie
+
+**Kontext:** Der Guide kann erstmals auf Level 11 aktiviert werden. Spieler können auch ohne Guide weiterquesten. Eine gespeicherte Schrittnummer oder das Level allein beschreibt deshalb nicht den tatsächlichen Stand.
+
+**Entscheidung:** Die Zielwahl setzt einen Zustandsabgleich bei Einstieg und Wiederaufnahme voraus. Aktive Objectives, nachweisbare Abgaben und verifizierte Voraussetzungen bestimmen gültige Routenpakete gemeinsam mit Charakterprofil, Level und Position. Fehlende Historie bleibt unknown. Details und Abnahmefälle stehen in [QUEST_ROUTING.md](QUEST_ROUTING.md).
+
+**Auswirkungen:** Kein erzwungenes Nachspielen ab Level 1, keine unzulässigen Kettensprünge und keine Voraussetzung einer lückenlosen Aufzeichnung. Die Umsetzung benötigt noch eine verifizierte Forever-Abschlussabfrage und Ladebereitschaft; diese Entscheidung legt keine Bridge-Technik fest.
